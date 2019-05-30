@@ -11,7 +11,7 @@
           </div>
           <div class="div1-col2">
             <div>
-              <input v-model="message" placeholder="Untitled Doc Template" class="title-input">
+              <input v-model="title" placeholder="Untitled Doc Template" class="title-input">
             </div>
             <div class="buttons-container">
               <button class="function-button">File</button>
@@ -57,7 +57,7 @@ export default {
       previewContent: "",
       jsonContent: "",
       id: this.$route.params.id,
-      message: "",
+      title: "",
       isLoading: true,
       fullPage: true
     };
@@ -71,6 +71,7 @@ export default {
         var element = document.querySelector("trix-editor");
         element.editor.insertHTML(data.data.getDoc.content);
         this.isLoading = false;
+        this.title = data.data.getDoc.title;
       })
       .catch(err => {
         console.log("err", err);
@@ -113,6 +114,7 @@ export default {
         .mutate({
           mutation: saveDoc(
             this.id,
+            this.title,
             this.previewContent.replace(/\"/g, '\\"'),
             "PREVIEW"
           )
@@ -130,7 +132,7 @@ export default {
       // console.log(myEscapedJSONString);
       this.$apollo
         .mutate({
-          mutation: saveDoc(this.id, this.nonJsonContent, "EDIT")
+          mutation: saveDoc(this.id, this.title, this.nonJsonContent, "EDIT")
         })
         .then(() => {
           this.savePreviewDataToDb();
@@ -142,7 +144,7 @@ export default {
     publishTemplate() {
       this.$apollo
         .mutate({
-          mutation: saveDoc(this.id, this.nonJsonContent, "LIVE")
+          mutation: saveDoc(this.id, this.title, this.nonJsonContent, "LIVE")
         })
         .then(data => {
           console.log(data);
@@ -155,6 +157,9 @@ export default {
   watch: {
     editorContent: {
       handler: "updateEditorContent"
+    },
+    title: {
+      handler: "saveEditDataToDb"
     }
   }
 };

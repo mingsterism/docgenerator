@@ -11,7 +11,7 @@
           </div>
           <div class="div1-col2">
             <div>
-              <input v-model="message" placeholder="Untitled Doc Template" class="title-input">
+              <input v-model="title" placeholder="Untitled Doc Template" class="title-input">
             </div>
             <div class="buttons-container">
               <button class="function-button">File</button>
@@ -53,7 +53,7 @@ export default {
       isLoading: true,
       fullPage: true,
       id: this.$route.params.id,
-      message: ""
+      title: ""
     };
   },
   components: {
@@ -69,6 +69,8 @@ export default {
         this.previewContent = data.data.getDoc.content;
         element.innerHTML = this.previewContent;
         this.isLoading = false;
+        this.title = data.data.getDoc.title;
+        console.log(data.data.getDoc);
 
         let eles = document.getElementsByClassName("preview-button");
         for (let i = 0; i < eles.length; i++) {

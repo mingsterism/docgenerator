@@ -1,10 +1,10 @@
 import { gql } from "apollo-boost";
 
-export const saveDoc = (id, content, docType) => {
+export const saveDoc = (id, title, content, docType) => {
   let str = ` mutation {
      saveDoc(
        input: {
-         title: "Demo"
+         title: "${title}"
          docType: ${docType}
          content: "${content}"
          docID: "${id}"
